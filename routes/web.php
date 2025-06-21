@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return redirect()->route('search');
 });
 
 Route::get('/dashboard', function () {
@@ -15,18 +15,17 @@ Route::get('/inbox', function () {
     return view('inbox');
 })->name('inbox');
 
-Route::get('/schedule', function () {
+Route::get('/schedule', ['title' => 'Schedule'], function () {
     return view('schedule');
 })->name('schedule');
 
+// Main search/courses page (merged)
 Route::get('/search', [CourseController::class, 'search'])->name('search');
+Route::get('/courses', [CourseController::class, 'search'])->name('courses'); // Redirect to search
 
-// Updated route to use controller method
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+Route::get('/courses/{courseId}/lessons/{lessonId}', [CourseController::class, 'showLesson'])->name('courses.lessons.show');
 
-Route::get('/courses/{courseId}/lessons/{lessonId}', function($courseId, $lessonId) {
-    return view('lesson-detail', ['courseId' => $courseId, 'lessonId' => $lessonId]);
-})->name('courses.lessons.show');
 
 Route::get('/settings', function () {
     return view('settings');
@@ -40,7 +39,6 @@ Route::get('/subscription', function () {
     return view('subscription');
 })->name('subscription');
 
-Route::get('/learnmap', function () {
+Route::get('/learnmap', ['title' => 'LearnMap'], function () {
     return view('learnmap');
 })->name('learnmap');
-

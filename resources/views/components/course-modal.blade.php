@@ -21,7 +21,7 @@
              x-transition:leave="ease-in duration-200"
              x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
              x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-             class="relative bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-hidden"
+             class="relative bg-white rounded-lg shadow-xl max-w-7xl w-full max-h-[90vh] overflow-hidden"
              @click.stop>
             
             <!-- Close button -->
@@ -30,9 +30,10 @@
                 <x-heroicon-o-x-mark class="h-6 w-6" />
             </button>
             
+            <!-- Equal 50/50 columns -->
             <div class="flex flex-col lg:flex-row h-full max-h-[90vh]">
-                <!-- Left side - Course details -->
-                <div class="flex-1 p-6 overflow-y-auto">
+                <!-- Left side - Course details (50%) -->
+                <div class="flex-1 lg:w-1/2 p-6 overflow-y-auto">
                     <template x-if="selectedCourse">
                         <div>
                             <!-- Course header -->
@@ -88,17 +89,19 @@
                             <div class="flex gap-3 mb-6">
                                 <a :href="selectedCourse.videoUrl" 
                                    target="_blank"
-                                   class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center h-12">
+                                   class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center">
                                     <x-heroicon-o-play class="h-5 w-5 mr-2" />
                                     Watch Preview
                                 </a>
-                            
+                                <button class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                                    Add to Wishlist
+                                </button>
                             </div>
 
                             <!-- View Full Course Button (Mobile) -->
                             <div class="lg:hidden mb-6">
-                                <a :href="`/courses/${Object.keys(courses).find(key => courses[key] === selectedCourse) || 1}`"
-                                   class="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center h-12">
+                                <a :href="`/courses/${selectedCourse.id}`"
+                                   class="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center">
                                     <x-heroicon-o-academic-cap class="h-5 w-5 mr-2" />
                                     View Full Course
                                 </a>
@@ -107,36 +110,37 @@
                     </template>
                 </div>
 
-                <!-- Right side - Course Content & Video preview -->
-                <div class="lg:w-96 bg-gray-50 border-l border-gray-200 flex flex-col">
+                <!-- Right side - Course Content & Video preview (50%) -->
+                <div class="flex-1 lg:w-1/2 bg-gray-50 border-l border-gray-200 flex flex-col">
                     <template x-if="selectedCourse">
                         <div class="h-full flex flex-col">
-                            <!-- Video Preview Section -->
-                            <div class="bg-gray-900 p-6 flex-shrink-0">
-                                <div class="aspect-video bg-gray-800 rounded-lg mb-4 flex items-center justify-center">
+                            <!-- Video Preview Section - Reduced height -->
+                            <div class="bg-gray-900 p-4 flex-shrink-0">
+                                <div class="aspect-video bg-gray-800 rounded-lg mb-3 flex items-center justify-center">
                                     <button @click="window.open(selectedCourse.videoUrl, '_blank')"
                                             class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-full p-4 transition-colors">
                                         <x-heroicon-s-play class="h-12 w-12 text-white" />
                                     </button>
                                 </div>
-                                <p class="text-white text-sm opacity-80 text-center">Click to watch course preview</p>
+                                <p class="text-white text-sm opacity-90 text-center">Click to watch course preview</p>
                             </div>
 
-                            <!-- Course Content Section - Scrollable -->
-                            <div class="flex-1 flex flex-col min-h-0">
-                                <div class="p-6 pb-4 flex-shrink-0">
-                                    <div class="flex items-center justify-between mb-4">
+                            <!-- Course Content Section - More space and lifted up -->
+                            <div class="flex-1 flex flex-col min-h-0 bg-white">
+                                <div class="p-4 pb-2 flex-shrink-0 border-b border-gray-200">
+                                    <div class="flex items-center justify-between">
                                         <h3 class="text-lg font-semibold text-gray-900">Course Content</h3>
-                                        <span class="text-sm text-gray-500" x-text="selectedCourse.lessons ? selectedCourse.lessons.length + ' lessons' : '0 lessons'"></span>
+                                        <span class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full" 
+                                              x-text="selectedCourse.lessons ? selectedCourse.lessons.length + ' lessons' : '0 lessons'"></span>
                                     </div>
                                 </div>
 
-                                <!-- Scrollable Lessons List -->
-                                <div class="flex-1 px-6 pb-6 overflow-y-auto">
+                                <!-- Scrollable Lessons List - More prominent -->
+                                <div class="flex-1 p-4 overflow-y-auto">
                                     <div class="space-y-2">
                                         <template x-for="(lesson, index) in (selectedCourse.lessons || [])" :key="lesson.id">
-                                            <div class="group border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-200 transition-colors cursor-pointer"
-                                                 @click.stop="window.location.href = `/courses/${Object.keys(courses).find(key => courses[key] === selectedCourse) || 1}/lessons/${lesson.id}`">
+                                            <div class="group border border-gray-200 rounded-lg p-3 hover:bg-blue-50 hover:border-blue-300 hover:shadow-sm transition-all cursor-pointer"
+                                                 @click.stop="window.location.href = `/courses/${selectedCourse.id}/lessons/${lesson.id}`">
                                                 <div class="flex items-center justify-between">
                                                     <div class="flex items-center space-x-3">
                                                         <div class="flex-shrink-0">
@@ -145,22 +149,37 @@
                                                             </div>
                                                         </div>
                                                         <div class="flex-1 min-w-0">
-                                                            <p class="text-sm font-medium text-gray-900 group-hover:text-blue-700 transition-colors" 
+                                                            <p class="text-sm font-medium text-gray-900 group-hover:text-blue-700 transition-colors line-clamp-1" 
                                                                x-text="`${index + 1}. ${lesson.title}`"></p>
-                                                            <p class="text-xs text-gray-500" x-text="lesson.duration"></p>
+                                                            <p class="text-xs text-gray-500 mt-0.5" x-text="lesson.duration"></p>
                                                         </div>
                                                     </div>
-                                                    <x-heroicon-o-chevron-right class="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                                                    <div class="flex items-center space-x-2">
+                                                        <template x-if="lesson.is_free">
+                                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                                                                Free
+                                                            </span>
+                                                        </template>
+                                                        <x-heroicon-o-chevron-right class="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                                                    </div>
                                                 </div>
+                                            </div>
+                                        </template>
+                                        
+                                        <!-- Empty state -->
+                                        <template x-if="!selectedCourse.lessons || selectedCourse.lessons.length === 0">
+                                            <div class="text-center py-8">
+                                                <x-heroicon-o-academic-cap class="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                                                <p class="text-gray-500 text-sm">No lessons available yet</p>
                                             </div>
                                         </template>
                                     </div>
                                 </div>
 
-                                <!-- View Full Course Button (Desktop) - Fixed at bottom -->
-                                <div class="p-6 pt-4 border-t border-gray-200 flex-shrink-0">
-                                    <a :href="`/courses/${Object.keys(courses).find(key => courses[key] === selectedCourse) || 1}`"
-                                       class="w-full bg-gray-900 text-white px-4 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center justify-center h-12">
+                                <!-- View Full Course Button - More prominent -->
+                                <div class="p-4 border-t border-gray-200 flex-shrink-0 bg-gray-50">
+                                    <a :href="`/courses/${selectedCourse.id}`"
+                                       class="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors flex items-center justify-center shadow-sm">
                                         <x-heroicon-o-academic-cap class="h-5 w-5 mr-2" />
                                         View Full Course
                                     </a>
