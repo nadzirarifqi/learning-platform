@@ -12,12 +12,13 @@
             <span :class="{'opacity-0 hidden': {{ $collapsed ? 'true' : 'collapsed' }}, 'opacity-100': !{{ $collapsed ? 'true' : 'collapsed' }}}" class="transition-opacity duration-300">Dashboard</span>
           </a>
         </li> 
+        
         <li>
-          <a href="{{ route('course') }}" 
-             class="group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('course') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}"
+          <a href="{{ route('search') }}" 
+             class="group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold {{ request()->routeIs('search') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}"
              :class="{'justify-center': {{ $collapsed ? 'true' : 'collapsed' }}}">
             <x-heroicon-o-academic-cap class="h-6 w-6 shrink-0" />
-            <span :class="{'opacity-0 hidden': {{ $collapsed ? 'true' : 'collapsed' }}, 'opacity-100': !{{ $collapsed ? 'true' : 'collapsed' }}}" class="transition-opacity duration-300">Course</span>
+            <span :class="{'opacity-0 hidden': {{ $collapsed ? 'true' : 'collapsed' }}, 'opacity-100': !{{ $collapsed ? 'true' : 'collapsed' }}}" class="transition-opacity duration-300">Search</span>
           </a>
         </li>
         <li>

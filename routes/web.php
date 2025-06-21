@@ -1,70 +1,46 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CourseController;
 
-// Dashboard routes (main page)
 Route::get('/', function () {
+    return redirect()->route('dashboard');
+});
+
+Route::get('/dashboard', function () {
     return view('dashboard', ['title' => 'Dashboard']);
 })->name('dashboard');
 
-// Platform navigation routes
 Route::get('/inbox', function () {
-    return view('inbox', ['title' => 'Inbox']);
+    return view('inbox');
 })->name('inbox');
 
 Route::get('/schedule', function () {
-    return view('schedule', ['title' => 'Schedule']);
+    return view('schedule');
 })->name('schedule');
 
-Route::get('/course', function () {
-    return view('course',  ['title' => 'Course']);
-})->name('course');
+Route::get('/search', [CourseController::class, 'search'])->name('search');
+
+// Updated route to use controller method
+Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+
+Route::get('/courses/{courseId}/lessons/{lessonId}', function($courseId, $lessonId) {
+    return view('lesson-detail', ['courseId' => $courseId, 'lessonId' => $lessonId]);
+})->name('courses.lessons.show');
 
 Route::get('/settings', function () {
-    return view('settings', ['title' => 'Settings']);
+    return view('settings');
 })->name('settings');
 
-Route::get('/learnmap', function () {
-    return view('learnmap', ['title' => 'LearnMap']);
-})->name('learnmap');
-
-
-// // User profile and account routes
 Route::get('/profile', function () {
-    return view('profile', ['title' => 'Profile']);
+    return view('profile');
 })->name('profile');
 
 Route::get('/subscription', function () {
-    return view('subscription', ['title' => 'Subscription']);
+    return view('subscription');
 })->name('subscription');
 
+Route::get('/learnmap', function () {
+    return view('learnmap');
+})->name('learnmap');
 
-// // Authentication routes
-Route::post('/logout', function () {
-    auth()->logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-    return redirect('/');
-})->name('logout');
-
-// Additional utility routes you might need
-Route::get('/notifications', function () {
-    return view('notifications');
-})->name('notifications');
-
-// If you want to add authentication middleware to protect certain routes
-Route::middleware(['auth'])->group(function () {
-    // Protected routes go here
-    // Example:
-    // Route::get('/admin', [AdminController::class, 'index'])->name('admin');
-});
-
-// If you're using Laravel Breeze, Jetstream, or custom auth, you might want to add:
-// require __DIR__.'/auth.php';
-
-// API routes for AJAX calls (optional)
-Route::prefix('api')->group(function () {
-    Route::get('/notifications/count', function () {
-        return response()->json(['count' => 3]);
-    });
-});
